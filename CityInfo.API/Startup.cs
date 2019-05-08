@@ -1,12 +1,13 @@
-﻿using CityInfo.API.Services;
+﻿using CityInfo.API.Entities;
+using CityInfo.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
 
 namespace CityInfo.API
 {
@@ -45,6 +46,8 @@ namespace CityInfo.API
 #else
             services.AddTransient<IMailService, CloudMailService>(); // If we are not in the debug, it will use this service.
 #endif
+            var connectionString = Startup.Configuration["connectionStrings:cityInfoDbConnectionString"];
+            services.AddDbContext<CityInfoContext>(o => o.UseSqlServer(connectionString));
 
         }
 
